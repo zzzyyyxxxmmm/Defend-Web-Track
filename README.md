@@ -15,8 +15,8 @@ Our key contributions are:
 When we visit a website, we need to send the http request to the server and the http header includes some information of our Brower such as User Agent, Accept, Content encoding etc. Because of the difference of computers, browsers and people who use it, nearly each people send different header. In figure 1, we can see that less than 0.1% people use the same agent like us and only 15.19% people who have the same plugins like us. Website can distinguish us by combining such difference. However, it is not enough for them to identify us because even if two people who have the same header, they stil l can not identify which one is the real one. So Http header is not enough to implement such track.
 What’s more, they can use JavaScript language to read our computer information like timezone and screen resolution (figure 2). These extend the information they can use.
 
-<img src="https://github.com/zzzyyyxxxmmm/Defend-Web-Track/img/1.png">
-<img src="https://github.com/zzzyyyxxxmmm/Defend-Web-Track/img/2.png">
+<img src="https://github.com/zzzyyyxxxmmm/Defend-Web-Track/blob/master/img/1.png">
+<img src="https://github.com/zzzyyyxxxmmm/Defend-Web-Track/blob/master/img/2.png">
 
 
 ## Canvas Fingerprinting
@@ -25,7 +25,7 @@ When a user visits a page, the fingerprinting script first draws text with the f
 Variations in which GPU is installed or the graphics driver cause the variations in the fingerprint. The fingerprint can be stored and shared with advertising partners to identify users when they visit affiliated websites. A profile can be created from the user's browsing activity allowing advertisers to target advertising to the user's inferred demographics and preferences.[3][4].
 We can test our canvas fingerprinting in browserleaks.com like figure3
 
-<img src="https://github.com/zzzyyyxxxmmm/Defend-Web-Track/img/3.png">
+<img src="https://github.com/zzzyyyxxxmmm/Defend-Web-Track/blob/master/img/3.png">
 
 ## Defense
 We propose two methods to defend track we mentioned above. First one is to modify the http header and the second one is to override JavaScript prototype function.
@@ -38,35 +38,35 @@ To visualize how this works, imagine you are standing in a crowd. Not caring abo
 So, we randomly choose the most widely used http headers from [6] instead of generating a random string. Because each time we choose a header which is widely used by people, so the header looks normal. You change to a normal face rather than wearing a mask.
 2. Actually, even if we solve the above problem, we still can be tracked. A normal visitor will not change his fingerprint in a session. So, if you change your fingerprint during a session, that behavior is unusual, and it’s enough to categorize you into an irregular group. In our example, submitting random web fingerprint is like you continuously change your face which is really strange. So, we record the last website we visit and check weather the top level of the url changes or not. If it doesn’t change, that means we are still accessing a same website so we should not change the http header for the next time.
 
-<img src="https://github.com/zzzyyyxxxmmm/Defend-Web-Track/img/4.png">
+<img src="https://github.com/zzzyyyxxxmmm/Defend-Web-Track/blob/master/img/4.png">
 
 ### Override JavaScript Function
 The second is to modify the prototype of JavaScript. The server can utilize some JavaScript functions to collect our information in addition to http header like timezone, plugins. We hope to change it as same as http header. They way we did this is to override the key function. We inject our script before the website loads so that the website can only use our own function. As for the canvas, we just randomize the result.
 We can test the timezone function in chrome console:
 
-<img src="https://github.com/zzzyyyxxxmmm/Defend-Web-Track/img/5.png">
+<img src="https://github.com/zzzyyyxxxmmm/Defend-Web-Track/blob/master/img/5.png">
 
 The Date().prototype function provide the protype function that can help us to override it. Some functions doesn’t provide prototype, so we need to override the keywords that rewrite the whole definition of the function using defineProperty.
 
-<img src="https://github.com/zzzyyyxxxmmm/Defend-Web-Track/img/6.png">
+<img src="https://github.com/zzzyyyxxxmmm/Defend-Web-Track/blob/master/img/6.png">
 
 Because we don’t find the most widely used canvas configuration, we just simply add noise when generate pictures using canvas.
 
 ## Evaluation
 We develop a chrome extension to implement our defense. Most of the language we use is JavaScript, jQuery and HTML. With the document of google extension development, we successfully develop our own chrome extension based on an extension which simply implement changing http header [7]. We add function override and solve the problem in 3.1.
 
-<img src="https://github.com/zzzyyyxxxmmm/Defend-Web-Track/img/7.png">
+<img src="https://github.com/zzzyyyxxxmmm/Defend-Web-Track/blob/master/img/7.png">
 
 We have two options: change header or change JavaScript, and url line indicates the last url we visited.
 We test our extension on amiunique.com to show the difference between the situation before and after we change the HTTP header. Figure8 shows the normal fingerprinting information we have. Even we using incognito window to open this web, we still get the same information which means we have been tracked. Figure9 shows the result after we open our extension. We can see the difference between User-Agent, Accept, screen resolution and timezone. We can see that canvas changed by observing Similarity ratio. Besides, we can also test our canvas from [8] which generate a signature of our canvas like figure 7.
 
-<img src="https://github.com/zzzyyyxxxmmm/Defend-Web-Track/img/8.png">
+<img src="https://github.com/zzzyyyxxxmmm/Defend-Web-Track/blob/master/img/8.png">
 
-<img src="https://github.com/zzzyyyxxxmmm/Defend-Web-Track/img/9.png">
+<img src="https://github.com/zzzyyyxxxmmm/Defend-Web-Track/blob/master/img/9.png">
 
-<img src="https://github.com/zzzyyyxxxmmm/Defend-Web-Track/img/10.png">
+<img src="https://github.com/zzzyyyxxxmmm/Defend-Web-Track/blob/master/img/10.png">
 
-<img src="https://github.com/zzzyyyxxxmmm/Defend-Web-Track/img/11.png">
+<img src="https://github.com/zzzyyyxxxmmm/Defend-Web-Track/blob/master/img/11.png">
 
 ## Challenge
 
@@ -80,7 +80,7 @@ Actually, we can use content scripts to write our injection code. But this code 
 ### Communicating between popup and content script.
 I plan to add some alert on the popup to show which information the web try to get from us and the most hard part is how to send message from content script to popup. I tried to send message from override function in content script but it doesn’t work. And I just use alert() to show the message.
 
-<img src="https://github.com/zzzyyyxxxmmm/Defend-Web-Track/img/12.png">
+<img src="https://github.com/zzzyyyxxxmmm/Defend-Web-Track/blob/master/img/12.png">
 
 ## Related work
 Some http header extension is useful in github[7]. We can test our browser uniqueness in [9][10]. The browser fingerprint technique took another big step in 2012 with the release of the Mowery and Shacham paper[11], which focused primarily on the effectiveness of the canvas fingerprint.
@@ -94,15 +94,24 @@ the similarity ratio of different attributes and lead trackers to a wrong direct
 ## References
 
 [1] Lance Cottrell, chief scientist, Ntrepid, Browser fingerprints, and why they are so hard to erase, https://www.networkworld.com/article/2884026/security0/browser-fingerprints-and-why-they-are-so-hard-to-erase.html
-[2]Acar, Gunes; Eubank, Christian; Englehardt, Steven; Juarez, Marc; Narayanan, Arvind; Diaz, Claudia (July 24, 2014). "The Web never forgets: Persistent tracking mechanisms in the wild". Retrieved July 24, 2014.
-[3] Angwin, Julia (July 21, 2014). "Meet the Online Tracking Device That is Virtually Impossible to Block". ProPublica. Retrieved July 21, 2014.
-[4] Nikiforakis, Nick; Acar, Günes (2014-07-25). "Browser Fingerprinting and the Online-Tracking Arms Race". ieee.org. IEEE. Retrieved October 31, 2014.
-[5] How Canvas Fingerprint Blockers Make You Easily Trackable https://multiloginapp.com/how-canvas-fingerprint-blockers-make-you-easily-trackable/
-[6] Most Common User Agents https://techblog.willshouse.com/2012/01/03/most-common-user-agents/
-[7] chenyoufu modify-http-headers https://github.com/chenyoufu/modify-http-headers
-[8] http://yuya-takeyama.github.io/canvas_fingerprint_checker/8]
-[9] panopticlick https://panopticlick.eff.org/
-[10] Am I Unique https://amiunique.org/
-[11] Mowery, Keaton and Hovav Shacham. “Pixel Perfect: Fingerprinting Canvas in HTML5.” (2012).
 
+[2]Acar, Gunes; Eubank, Christian; Englehardt, Steven; Juarez, Marc; Narayanan, Arvind; Diaz, Claudia (July 24, 2014). "The Web never forgets: Persistent tracking mechanisms in the wild". Retrieved July 24, 2014.
+
+[3] Angwin, Julia (July 21, 2014). "Meet the Online Tracking Device That is Virtually Impossible to Block". ProPublica. Retrieved July 21, 2014.
+
+[4] Nikiforakis, Nick; Acar, Günes (2014-07-25). "Browser Fingerprinting and the Online-Tracking Arms Race". ieee.org. IEEE. Retrieved October 31, 2014.
+
+[5] How Canvas Fingerprint Blockers Make You Easily Trackable https://multiloginapp.com/how-canvas-fingerprint-blockers-make-you-easily-trackable/
+
+[6] Most Common User Agents https://techblog.willshouse.com/2012/01/03/most-common-user-agents/
+
+[7] chenyoufu modify-http-headers https://github.com/chenyoufu/modify-http-headers
+
+[8] http://yuya-takeyama.github.io/canvas_fingerprint_checker/8]
+
+[9] panopticlick https://panopticlick.eff.org/
+
+[10] Am I Unique https://amiunique.org/
+
+[11] Mowery, Keaton and Hovav Shacham. “Pixel Perfect: Fingerprinting Canvas in HTML5.” (2012).
 
