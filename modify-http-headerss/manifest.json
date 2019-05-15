@@ -1,0 +1,46 @@
+{
+    "manifest_version": 2,
+
+    "name": "Modify-http-headers",
+    "description": "This extension can edit http headers.",
+    "version": "1.0",
+
+    "permissions": [
+        "tabs",
+        "cookies",
+        "webRequest",
+        "webRequestBlocking",
+        "http://*/*",
+        "https://*/*"
+    ],
+
+    "icons": {
+        "16": "salmon-icon.png",
+        "48": "salmon-icon.png",
+        "128": "salmon-icon.png"
+    },
+
+    "options_page": "options.html",
+
+    "background": {
+        "scripts": ["js/background.js"]
+    },
+    "content_scripts": [
+      {
+         "matches": ["*://*/*"],
+        "js":["js/before_load.js"],
+        "run_at": "document_start"
+      }
+    ],
+    "browser_action": {
+        "default_icon": "salmon-icon.png",
+        "default_title": "Modify-http-headers",
+        "default_popup": "modify-http-headers.html"
+    },
+
+    "web_accessible_resources" : [
+        "js/inject.js",
+        "js/before_load.js"
+  ]
+
+}
